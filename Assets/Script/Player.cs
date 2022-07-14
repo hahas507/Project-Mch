@@ -27,12 +27,12 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      Debug.Log(flightUnit);
+        PostureControl();
     }
 
     void FixedUpdate()
     {
-       Movement();
+        Movement();
     }
 
     void Movement()
@@ -42,15 +42,29 @@ public class Player : MonoBehaviour
         {
             rb.AddForce(flightUnit.FlightUnitDir * speed);
         }
-        //Posture control
-        if(Input.GetKey(KeyCode.Q))
-        {
-            rb.angularVelocity -= rb.angularVelocity * postureControl * Time.deltaTime;
-        }    
-        //Rotation control
+        
+        //Direction control
         float yInput = Input.GetAxis("Horizontal");
         float xInput = Input.GetAxis("Vertical");
-        Vector3 direction = new Vector3(xInput, yInput, 0f);
-        rb.AddTorque(direction * rotationSpeed, ForceMode.Acceleration);
+        Vector3 direction = new Vector3(-xInput, yInput, 0f);
+        rb.AddRelativeTorque(direction * rotationSpeed, ForceMode.Acceleration);
+        //Rotation control
+        if(Input.GetKey(KeyCode.Q))
+        {
+            rb.AddRelativeTorque(Vector3.forward * rotationSpeed, ForceMode.Acceleration);
+        }
+        if(Input.GetKey(KeyCode.E))
+        {
+            rb.AddRelativeTorque(-Vector3.forward * rotationSpeed, ForceMode.Acceleration);
+        }
     }    
+    
+    void PostureControl()
+    {
+        //Posture control
+        if(Input.GetKey(KeyCode.F))
+        {
+            rb.angularVelocity -= rb.angularVelocity * postureControl * Time.deltaTime;
+        }
+    }
 }
