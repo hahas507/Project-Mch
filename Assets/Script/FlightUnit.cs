@@ -31,7 +31,6 @@ public class FlightUnit : MonoBehaviour
     void Update()
     {   
         Direction();
-        Debug.Log(FlightUnitDir);
     }
 
     void Direction()
