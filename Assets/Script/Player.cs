@@ -9,8 +9,12 @@ public class Player : MonoBehaviour
     [SerializeField] float postureControl;
     FlightUnit flightUnit;
     
-
     Rigidbody rb;
+    public Vector3 Position
+    {
+        get { return transform.position; }
+        set { transform.position = value; }
+    }
 
     void Awake()
     {
