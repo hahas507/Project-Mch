@@ -5442,8 +5442,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 777348609}
-  - component: {fileID: 777348610}
   - component: {fileID: 777348611}
+  - component: {fileID: 777348610}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -5480,7 +5480,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 100
-  rotationSpeed: 1
+  rotationSpeed: 0.464
   postureControl: 5.87
 --- !u!54 &777348611
 Rigidbody:
@@ -5640,7 +5640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a2b5a23a89f91249b5ca0ea3d1841b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camSpeed: 3
+  camSpeed: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 8

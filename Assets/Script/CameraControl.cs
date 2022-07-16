@@ -11,12 +11,19 @@ public class CameraControl : MonoBehaviour
     [SerializeField] LayerMask layerMask;
     [SerializeField] float maxDistance;
     Vector3 hitpoint;
+    Vector3 camRotation;
     Player player;
 
     public Vector3 Hitpoint
     {
         get { return hitpoint; }
         set { hitpoint = value; }
+    }
+
+    public Vector3 CamRotation
+    {
+        get { return camRotation; }
+        set { camRotation = value; }
     }
 
     void Update()
@@ -36,6 +43,8 @@ public class CameraControl : MonoBehaviour
         //임시로 정했지만 추후 수정해야함.
         currentXRotation = Mathf.Clamp(currentXRotation, -30f, 30f);
         currentYRotation = Mathf.Clamp(currentYRotation, -11f, 30f);
+        //현재 카메라의 위치를 가져옴.
+        camRotation = new Vector3(currentXRotation, currentYRotation, 0f);
         transform.localRotation = Quaternion.Euler(currentYRotation, currentXRotation, 0f);
     }
 

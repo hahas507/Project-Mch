@@ -7,7 +7,9 @@ public class Player : MonoBehaviour
     [SerializeField] float speed = 10f;
     [Range(0, 1)] [SerializeField] float rotationSpeed;
     [SerializeField] float postureControl;
+    Vector3 screenSize;
     FlightUnit flightUnit;
+    CameraControl camControl;
     
     Rigidbody rb;
     public Vector3 Position
@@ -19,13 +21,14 @@ public class Player : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        flightUnit = GetComponentInChildren(typeof(FlightUnit)) as FlightUnit;        
+        flightUnit = GetComponentInChildren(typeof(FlightUnit)) as FlightUnit;
+        camControl = GetComponentInChildren(typeof(CameraControl)) as CameraControl;      
     }
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        MouseMinMax();
     }
 
     // Update is called once per frame
@@ -47,11 +50,20 @@ public class Player : MonoBehaviour
             rb.AddForce(flightUnit.FlightUnitDir * speed);
         }
         
-        //Direction control
+        /* //Direction control with keyboard
         float yInput = Input.GetAxis("Horizontal");
         float xInput = Input.GetAxis("Vertical");
         Vector3 direction = new Vector3(-xInput, yInput, 0f);
+        rb.AddRelativeTorque(direction * rotationSpeed, ForceMode.Acceleration); */
+        
+        //mouse position
+        Vector3 mousePosition = Input.mousePosition;
+        float curMousePosX = Mathf.InverseLerp(0, screenSize.x, mousePosition.x);
+        float curMousePosY = Mathf.InverseLerp(0, screenSize.y, mousePosition.y);
+        Vector3 curMousePos = new Vector3(-curMousePosY, curMousePosX, 0f);
+        Vector3 direction = curMousePos - (new Vector3(-1f, 1f, 0f) * 0.5f);
         rb.AddRelativeTorque(direction * rotationSpeed, ForceMode.Acceleration);
+
         //Rotation control
         if(Input.GetKey(KeyCode.Q))
         {
@@ -70,5 +82,11 @@ public class Player : MonoBehaviour
         {
             rb.angularVelocity -= rb.angularVelocity * postureControl * Time.deltaTime;
         }
+    }
+
+    void MouseMinMax()
+    {
+        screenSize.x = Screen.width;
+        screenSize.y = Screen.height;    
     }
 }
