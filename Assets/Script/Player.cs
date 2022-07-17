@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     [Range(0, 1)] [SerializeField] float rotationSpeed;
     [Range(1, 5)] [SerializeField] float maxRotationSpeed;
     [SerializeField] float postureControl;
+    [SerializeField] GameObject body;
     Vector3 screenSize;
     FlightUnit flightUnit;
     CameraControl camControl;
@@ -23,7 +24,7 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         flightUnit = GetComponentInChildren(typeof(FlightUnit)) as FlightUnit;
-        camControl = GetComponentInChildren(typeof(CameraControl)) as CameraControl;      
+        camControl = GetComponentInChildren(typeof(CameraControl)) as CameraControl;
     }
     
     // Start is called before the first frame update
@@ -35,6 +36,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CenterOfMass();
     }
 
     void FixedUpdate()
@@ -112,5 +114,19 @@ public class Player : MonoBehaviour
     {
         screenSize.x = Screen.width;
         screenSize.y = Screen.height;    
+    }
+
+    void CenterOfMass()
+    {
+        //수정 필요
+        Vector3 com = transform.TransformPoint(body.transform.position);
+        rb.centerOfMass = com;
+    }
+
+    //draw gizmos sphere
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(Vector3.zero, 2f);
     }
 }

@@ -28,7 +28,7 @@ public class CameraControl : MonoBehaviour
 
     void Update()
     {
-        MoveCam();
+        //MoveCam();
         AimRay();
     }
 
