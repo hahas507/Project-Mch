@@ -5,8 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] float speed = 10f;
-    [Range(0, 100)] [SerializeField] float rotationSpeedXY;
-    [Range(0, 100)] [SerializeField] float rotationSpeedZ;
+    // [Range(0, 100)] [SerializeField] float rotationSpeedXY;
+    // [Range(0, 100)] [SerializeField] float rotationSpeedZ;
+    [Range(0, 1)] [SerializeField] float rotationSpeed;
     [Range(1, 5)] [SerializeField] float maxRotationSpeed;
     [SerializeField] float postureControl;
     [SerializeField] GameObject body;
@@ -37,7 +38,6 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CenterOfMass();
     }
 
     void FixedUpdate()
@@ -56,9 +56,10 @@ public class Player : MonoBehaviour
         float curMousePosX = Mathf.InverseLerp(0, screenSize.x, mousePosition.x);
         float curMousePosY = Mathf.InverseLerp(0, screenSize.y, mousePosition.y);
         Vector3 curMousePos = new Vector3(-curMousePosY, curMousePosX, 0f);
-        Vector3 direction = ((curMousePos - (new Vector3(-1f, 1f, 0f) * 0.5f)) * 20f);
-        Debug.Log(direction);
-        if(Mathf.Abs(direction.x) < 3f)
+        #region RotTransfrom
+        //transform을 이용한 회전
+        /*Vector3 direction = ((curMousePos - (new Vector3(-1f, 1f, 0f) * 0.5f)) * 20f);
+         if(Mathf.Abs(direction.x) < 3f)
         {            
             direction.x = 0f;
         }            
@@ -75,9 +76,22 @@ public class Player : MonoBehaviour
         else if(Input.GetKey(KeyCode.E))
         {
             transform.Rotate(Vector3.back * rotationSpeedZ * Time.deltaTime);
+        } */
+        #endregion
+        #region RotRigidbody
+        //rigidbody을 이용한 회전
+        Vector3 direction = ((curMousePos - (new Vector3(-1f, 1f, 0f) * 0.5f)) * 2f);
+        
+        if(Mathf.Abs(direction.x) < 0.5f)
+        {
+            direction.x = 0f;
+        }            
+        if(Mathf.Abs(direction.y) < 0.5f)
+        {
+            direction.y = 0f;
         }
-        /* 
-        rb.AddRelativeTorque(direction * rotationSpeedXY, ForceMode.VelocityChange);
+        CenterOfMass();
+        rb.AddRelativeTorque(direction * rotationSpeed, ForceMode.VelocityChange);
         if(rb.angularVelocity.magnitude > 1f)
         {
             //clamp rotation speed
@@ -85,45 +99,24 @@ public class Player : MonoBehaviour
                                             Mathf.Clamp(rb.angularVelocity.y, -maxRotationSpeed, maxRotationSpeed),
                                             Mathf.Clamp(rb.angularVelocity.z, -maxRotationSpeed, maxRotationSpeed));
         }
-        if(Mathf.Abs(direction.x) < 0.5f && Mathf.Abs(direction.y) < 0.5f)
-        {
-            rb.angularVelocity -= new Vector3(rb.angularVelocity.x, rb.angularVelocity.y, 0f) * postureControl * Time.deltaTime;
-            if(rb.angularVelocity.magnitude < 0.1f)
-            {
-                rb.angularVelocity = Vector3.zero;
-            }
-        } */
-        
-        //기존 코드
-        /* if(direction.magnitude > 0.5f)
-        {
-            rb.AddRelativeTorque(direction * rotationSpeedXY, ForceMode.VelocityChange);
-            if(rb.angularVelocity.magnitude > 1f)
-            {
-                //clamp rotation speed
-                rb.angularVelocity = new Vector3(Mathf.Clamp(rb.angularVelocity.x, -maxRotationSpeed, maxRotationSpeed),
-                                                 Mathf.Clamp(rb.angularVelocity.y, -maxRotationSpeed, maxRotationSpeed),
-                                                 Mathf.Clamp(rb.angularVelocity.z, -maxRotationSpeed, maxRotationSpeed));
-            }
-        }
-        else
+        /* if(Mathf.Abs(direction.x) < 0.5f && Mathf.Abs(direction.y) < 0.5f)
         {
             rb.angularVelocity -= new Vector3(rb.angularVelocity.x, rb.angularVelocity.y, 0f) * postureControl * Time.deltaTime;
         } */
-
         //Rotation control
-        /* if(Input.GetKey(KeyCode.Q))
+        if(Input.GetKey(KeyCode.Q))
         {
-            rb.AddRelativeTorque(Vector3.forward * rotationSpeedXY, ForceMode.VelocityChange);
+            rb.AddRelativeTorque(Vector3.forward * rotationSpeed, ForceMode.VelocityChange);
         }
         else if(Input.GetKey(KeyCode.E))
         {
-            rb.AddRelativeTorque(-Vector3.forward * rotationSpeedXY, ForceMode.VelocityChange);
+            rb.AddRelativeTorque(-Vector3.forward * rotationSpeed, ForceMode.VelocityChange);
         }
-        else
+        /* else
         {
             rb.angularVelocity -= new Vector3(0f, 0f, rb.angularVelocity.z) * postureControl * Time.deltaTime;
         } */
+        #endregion
     }    
     
     void MouseMinMax()
