@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         MouseMinMax();
+        CenterOfMass();
     }
 
     // Update is called once per frame
@@ -80,7 +81,7 @@ public class Player : MonoBehaviour
         #endregion
         #region RotRigidbody
         //rigidbody을 이용한 회전
-        Vector3 direction = ((curMousePos - (new Vector3(-1f, 1f, 0f) * 0.5f)) * 2f);
+         Vector3 direction = ((curMousePos - (new Vector3(-1f, 1f, 0f) * 0.5f)) * 2f);
         
         if(Mathf.Abs(direction.x) < 0.5f)
         {
@@ -91,18 +92,23 @@ public class Player : MonoBehaviour
             direction.y = 0f;
         }
         CenterOfMass();
+        Debug.Log(direction);
         rb.AddRelativeTorque(direction * rotationSpeed, ForceMode.VelocityChange);
-        if(rb.angularVelocity.magnitude > 1f)
+        /* if(rb.angularVelocity.magnitude > 1f)
         {
             //clamp rotation speed
             rb.angularVelocity = new Vector3(Mathf.Clamp(rb.angularVelocity.x, -maxRotationSpeed, maxRotationSpeed),
                                             Mathf.Clamp(rb.angularVelocity.y, -maxRotationSpeed, maxRotationSpeed),
                                             Mathf.Clamp(rb.angularVelocity.z, -maxRotationSpeed, maxRotationSpeed));
-        }
-        /* if(Mathf.Abs(direction.x) < 0.5f && Mathf.Abs(direction.y) < 0.5f)
-        {
-            rb.angularVelocity -= new Vector3(rb.angularVelocity.x, rb.angularVelocity.y, 0f) * postureControl * Time.deltaTime;
         } */
+        if(Mathf.Abs(direction.x) < 0.5f && Mathf.Abs(direction.y) < 0.5f)
+        {
+            //rb.angularVelocity -= new Vector3(rb.angularVelocity.x, rb.angularVelocity.y, rb.angularVelocity.z) * postureControl * Time.deltaTime;
+            if(rb.angularVelocity.magnitude < 0.1f)
+            {
+                rb.angularVelocity = Vector3.zero;
+            }
+        }
         //Rotation control
         if(Input.GetKey(KeyCode.Q))
         {
@@ -116,6 +122,13 @@ public class Player : MonoBehaviour
         {
             rb.angularVelocity -= new Vector3(0f, 0f, rb.angularVelocity.z) * postureControl * Time.deltaTime;
         } */
+        #endregion
+        #region Keyboard
+        //keyboard inputs
+        /* float xInput = Input.GetAxis("Horizontal");
+        float yInput = Input.GetAxis("Vertical");
+        Vector3 direction = new Vector3(xInput, yInput, 0f).normalized;        
+        rb.AddRelativeTorque(direction, ForceMode.VelocityChange); */
         #endregion
     }    
     
