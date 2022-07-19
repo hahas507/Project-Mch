@@ -50,9 +50,7 @@ public class CameraControl : MonoBehaviour
 
     void AimRay()
     {
-        //screen to ray
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //if ray doesn't hit anything, return
         if(Physics.Raycast(ray, out hit, maxDistance, layerMask))
         {
             hitpoint = hit.point;

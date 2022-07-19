@@ -48,41 +48,17 @@ public class Player : MonoBehaviour
 
     void Movement()
     {
-        //Driving force
+        //가속
         if(Input.GetKey(KeyCode.Space))
         {
             rb.AddForce(flightUnit.FlightUnitDir * speed);
         }
+        //XY축 회전
         Vector3 mousePosition = Input.mousePosition;
         float curMousePosX = Mathf.InverseLerp(0, screenSize.x, mousePosition.x);
         float curMousePosY = Mathf.InverseLerp(0, screenSize.y, mousePosition.y);
         Vector3 curMousePos = new Vector3(-curMousePosY, curMousePosX, 0f);
-        #region RotTransfrom
-        //transform을 이용한 회전
-        /*Vector3 direction = ((curMousePos - (new Vector3(-1f, 1f, 0f) * 0.5f)) * 20f);
-         if(Mathf.Abs(direction.x) < 3f)
-        {            
-            direction.x = 0f;
-        }            
-        if(Mathf.Abs(direction.y) < 3f)
-        {
-            direction.y = 0f;
-        }
-        transform.Rotate(direction * rotationSpeedXY * Time.deltaTime);
-        
-        if(Input.GetKey(KeyCode.Q))
-        {
-            transform.Rotate(Vector3.forward * rotationSpeedZ * Time.deltaTime);
-        }
-        else if(Input.GetKey(KeyCode.E))
-        {
-            transform.Rotate(Vector3.back * rotationSpeedZ * Time.deltaTime);
-        } */
-        #endregion
-        #region RotRigidbody
-        //rigidbody을 이용한 회전
-         Vector3 direction = ((curMousePos - (new Vector3(-1f, 1f, 0f) * 0.5f)) * 2f);
-        
+        Vector3 direction = ((curMousePos - (new Vector3(-1f, 1f, 0f) * 0.5f)) * 2f);        
         if(Mathf.Abs(direction.x) < 0.5f)
         {
             direction.x = 0f;
@@ -90,26 +66,15 @@ public class Player : MonoBehaviour
         if(Mathf.Abs(direction.y) < 0.5f)
         {
             direction.y = 0f;
-        }
-        CenterOfMass();
-        Debug.Log(direction);
+        }        
         rb.AddRelativeTorque(direction * rotationSpeed, ForceMode.VelocityChange);
-        /* if(rb.angularVelocity.magnitude > 1f)
+        //적당히 멈춤
+        if(rb.angularVelocity.magnitude < 0.1f)
         {
-            //clamp rotation speed
-            rb.angularVelocity = new Vector3(Mathf.Clamp(rb.angularVelocity.x, -maxRotationSpeed, maxRotationSpeed),
-                                            Mathf.Clamp(rb.angularVelocity.y, -maxRotationSpeed, maxRotationSpeed),
-                                            Mathf.Clamp(rb.angularVelocity.z, -maxRotationSpeed, maxRotationSpeed));
-        } */
-        if(Mathf.Abs(direction.x) < 0.5f && Mathf.Abs(direction.y) < 0.5f)
-        {
-            //rb.angularVelocity -= new Vector3(rb.angularVelocity.x, rb.angularVelocity.y, rb.angularVelocity.z) * postureControl * Time.deltaTime;
-            if(rb.angularVelocity.magnitude < 0.1f)
-            {
-                rb.angularVelocity = Vector3.zero;
-            }
+            rb.angularVelocity = Vector3.zero;
         }
-        //Rotation control
+
+        //Z축 회전
         if(Input.GetKey(KeyCode.Q))
         {
             rb.AddRelativeTorque(Vector3.forward * rotationSpeed, ForceMode.VelocityChange);
@@ -118,18 +83,6 @@ public class Player : MonoBehaviour
         {
             rb.AddRelativeTorque(-Vector3.forward * rotationSpeed, ForceMode.VelocityChange);
         }
-        /* else
-        {
-            rb.angularVelocity -= new Vector3(0f, 0f, rb.angularVelocity.z) * postureControl * Time.deltaTime;
-        } */
-        #endregion
-        #region Keyboard
-        //keyboard inputs
-        /* float xInput = Input.GetAxis("Horizontal");
-        float yInput = Input.GetAxis("Vertical");
-        Vector3 direction = new Vector3(xInput, yInput, 0f).normalized;        
-        rb.AddRelativeTorque(direction, ForceMode.VelocityChange); */
-        #endregion
     }    
     
     void MouseMinMax()
@@ -141,12 +94,5 @@ public class Player : MonoBehaviour
     void CenterOfMass()
     {
         rb.centerOfMass = Vector3.zero;
-    }
-
-    //draw gizmos sphere
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(Vector3.zero, 2f);
     }
 }

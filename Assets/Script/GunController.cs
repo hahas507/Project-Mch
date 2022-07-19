@@ -18,7 +18,7 @@ public class GunController : MonoBehaviour
 
     void GunAim()
     {
-       transform.LookAt(camControl.Hitpoint);       
-       Debug.DrawRay(transform.position, transform.forward * Vector3.Distance(transform.position, camControl.Hitpoint), Color.red);
+      transform.LookAt(camControl.Hitpoint);    
+      Debug.DrawRay(transform.position, transform.forward * Vector3.Distance(transform.position, camControl.Hitpoint), Color.red);
     }
 }
