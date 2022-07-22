@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Equipments : MonoBehaviour
+[CreateAssetMenu(fileName = "Equipments", menuName = "Equipments", order = 1)]
+public class Equipments : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public EquipmentType type;
+}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+public enum EquipmentType
+{
+    None,
+    Weapon,
+    Armor,
+    Accessory
 }

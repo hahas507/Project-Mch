@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestGun : GunController
+public class TestGun : MonoBehaviour
 {
     void Start()
     {
